@@ -1,0 +1,293 @@
+div {
+	/*border: solid 1px;*/
+}
+/*----------head-----------*/
+#head {
+	position: fixed;
+	top: 0px;
+	left: calc(50% - 400px);
+
+	height: 75px;
+	width: 800px;
+
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	background: linear-gradient(45deg, black, rgb(64,82,34), rgb(130,141,71));
+}
+
+#userdiv {
+	position: absolute;
+	top: 20px;
+	left: 30px;
+	background-color: white;
+	border-radius: 10px;
+	padding: 5px 20px 5px 20px;
+}
+
+#userdiv:hover {
+	cursor: pointer;
+}
+
+#server {
+	position: absolute;
+	right: 90px;
+	top: 20px;
+	background-color: white;
+	border-radius: 10px;
+	padding: 5px 20px 5px 20px;
+}
+#server:hover {
+	cursor: default;
+}
+
+#exit {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	color: black;
+	border-radius: 10px;
+	padding: 5px 20px 5px 20px;
+	border: solid transparent 1px;
+
+	transition: color .5s, border .5s;
+}
+#exit:hover {
+	border: solid 1px red;
+	cursor: pointer;
+	color: white;
+}
+
+/*------------center---------------*/
+#message-container {
+	position: fixed;
+	left: calc(50% - 375px);
+	right: calc(50% - 375px);
+	top: 74px;
+	bottom: 0;
+
+	border-left: solid #D9E0E7 1px;
+	border-right: solid #D9E0E7 1px;
+}
+
+#messages {
+	position: relative;
+	margin-top: 75px;
+	margin-left: calc(50% - 375px);
+	margin-bottom: 200px;
+	width: 750px;
+}
+
+
+/*------------message-----------------*/
+.message {
+	position: relative;
+	margin: 10px 10px 10px 10px;
+	padding: 10px;
+	border-radius: 15px;
+
+	min-width: 450px;
+	max-width: 700px;
+	min-height: 2em;
+
+	float: left;
+
+	border: solid #d0d0d0 1px;
+	background: #f5f5f5;
+
+	transition: border 1s;
+}
+
+.message > .message-img {
+	float: left;
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	background-size: 100%;
+}
+
+.message > .message-text {
+	margin-left: 50px;
+	margin-right: 100px;
+}
+
+.message > time {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+
+/*----------my message----------*/
+.my-message {
+	float: right;
+}
+.my-message:hover {
+	cursor: pointer;
+}
+
+.my-message .message-text:hover, .my-message time:hover {
+	cursor: text;
+}
+.my-message .message-img {
+	cursor: default;
+}
+
+#username-hint {
+	position: fixed;
+	padding: 5px 10px 5px 10px;
+	border-radius: 10px;
+	border-bottom-right-radius: 0;
+	background-color: #ccc;
+	z-index: 1500;
+}
+
+.selected-message {
+	border: solid rgb(64,82,34) 1px;
+	box-shadow: 0 0 2px rgb(64,82,34);
+}
+
+.my-message > .edit-button {
+	position: absolute;
+	right: 85px;
+	top: 1px;
+	width: 15px;
+	height: 15px;
+	opacity: .4;
+
+	background: url("./icon/edit.png");
+
+	transition: opacity .5s;
+}
+
+.edit-button:hover {
+	opacity: 1;
+}
+
+/*---------deleted message-----------*/
+
+.deleted-message {
+	border: 0;
+	padding: 0;
+	background: #FFFFFF;
+}
+
+.deleted-message > .message-text {
+	margin-top: 10px;
+	min-width: 0;
+	font-style: italic;
+}
+
+/*---------delete button-------------*/
+#delete-button {
+	position: fixed;
+	top: 80px;
+	left: calc(50% + 380px);
+
+	opacity: 0;
+
+	padding: 10px 20px 10px 20px;
+	border-radius: 10px;
+
+	background-color: #d9534f;
+	color: white;
+
+	transition: opacity .5s;
+}	
+#delete-button:hover {
+	cursor: pointer;
+	/*opacity: 1;	is made by JS*/
+}
+
+
+/*----------bootom--------------*/
+#bottom {
+	position: fixed;
+	left: calc(50% - 375px);
+	right: calc(50% - 375px);
+	bottom: 0px;
+	height: 135px;
+
+	background: linear-gradient(to bottom left, #2a4d1e, rgb(84,167,108));
+	border: solid #D9E0E7 1px;
+
+	transition: bottom .5s;
+}
+
+#bottom #img {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+
+	height: 105px;
+	width: 105px;
+	float: left;
+
+	background-size: 100%;
+}
+
+#img:hover {
+	border: solid white 2px;
+}
+
+#bottom textarea {
+	margin: 10px 10px -7px 125px;
+	width: calc(100% - 135px);
+	height: 105px;
+
+	padding: 0.2em;
+
+	z-index: 500;
+	resize: none;
+}
+
+#bottom > #send-message-button {
+	margin-left: 600px;
+	width: 100px;
+	height: 20px;
+
+	text-align: center;
+
+	position: relative;
+	z-index: 10;
+
+	background: orange;
+}
+
+#send-message-button:hover {
+	cursor: pointer;
+	/*opacity: .9;*/
+	box-shadow: 0 0 2px #fefefe;
+}
+
+#send-message-button:active {
+	opacity: .8;
+}
+
+
+/*-------------modals-------------------*/
+.modal-background {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,.6);
+
+	z-index: 1000;
+}
+
+.entering {
+	position: fixed;
+	top: 300px;
+	left: calc(50% - 150px);
+	width: 300px;
+	height: 150px;
+	border-radius: 30px;
+	color: white;
+
+	background: linear-gradient(to bottom left, #2a4d1e, rgb(84,167,108));
+	
+	padding-top: 30px;
+	text-align: center;
+}

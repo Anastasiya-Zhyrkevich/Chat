@@ -1,0 +1,26 @@
+DELETE	
+[
+	"1234", "..."
+]
+
+PUT
+{
+	"message":	{
+					"messageId":"123456789",
+					"messageText":"abc"
+				}
+}
+
+PUT
+{
+	"user":	{
+				"userId":"321",
+				"username":"cba"
+			}
+}
+
+POST
+{
+	"userId":"321",
+	"messageText":"abc"
+}

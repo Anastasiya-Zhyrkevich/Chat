@@ -1,0 +1,59 @@
+GET
+{
+	"messages":[
+		{
+			"userId":"321",
+			"messageId":"123456789",
+			"messageText":"abc",
+			"messageTime":"13245768",
+			"isDeleted":"true"
+		}
+	],
+
+	"editedMessages":[
+		{
+			"messageId":"123456789",
+			"messageText":"abc"
+		}
+	],
+
+	"deletedMessageIds":[
+		"123456789",
+		"123456788"
+	],
+
+	"users":[
+		{
+			"userId":"123",
+			"username":"cba",
+			"userImage":"./..."	//не знаю, как тут надо
+		}
+	],
+
+	"changedUsers":[
+		{
+			"userId":"123",
+			"username":"cba",
+			"userImage":"./.."
+		}
+	],
+
+	"messageToken":"11",
+	"messageEditToken":"21",
+	"messageDeleteToken":"31",
+
+	"userToken":"51",
+	"userChangeToken":"61"
+}
+
+GET
+{
+	"currentUserId":"1234",
+	
+	"messageToken":"11",
+	"messageEditToken":"21",
+	"messageDeleteToken":"31",
+
+	"userToken":"51",
+	"userChangeToken":"61"
+}
