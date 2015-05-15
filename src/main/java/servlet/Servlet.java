@@ -1,5 +1,7 @@
 package servlet;
 
+import managers.RequestManager;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,11 @@ public class Servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+        String type = req.getParameter("type");
+        if (type.compareTo("GET_UPDATE") == 0)
+            RequestManager.updateRequest(req, resp);
+        if (type.compareTo("BASE_REQUEST") == 0)
+            RequestManager.baseRequest(req, resp);
     }
 
     @Override
