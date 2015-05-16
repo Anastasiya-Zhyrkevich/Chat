@@ -270,7 +270,7 @@ public final class DatabaseHelper {
             stmt.setInt(3, lastToken);
             rs = stmt.executeQuery();
             while (rs.next()){
-                User user = new User(Integer.parseInt(rs.getString("mess_id")),
+                User user = new User(Integer.parseInt(rs.getString("user_id")),
                         rs.getString("text"));
                 result.add(user);
             }

@@ -17,7 +17,7 @@ public class RequestManager {
         String userName = req.getParameter("username");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("currentUserId", DatabaseHelper.registerUser(userName));
-        jsonObject.put("token", 1);
+        jsonObject.put("token", 0);
         sendResponse(resp, jsonObject.toJSONString());
     }
     public static void updateRequest(HttpServletRequest req, HttpServletResponse resp){

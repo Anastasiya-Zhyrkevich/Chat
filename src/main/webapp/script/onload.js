@@ -3,10 +3,7 @@ document.body.onload = function() {
 };
 
 function startGettingMessages() {
-    timer = setTimeout(function func() {
-        doGet();
-        timer = setTimeout(func, 10000);
-    }, 10000);
+    doGet();
 }
 
 function stopGettingMessages() {
@@ -25,6 +22,9 @@ function doGet() {
             showServerState(true);
             if(xhr.readyState == 4) {
                 var resp = JSON.parse(xhr.responseText);
+
+                timer = setTimeout(function func() {
+                    doGet(); }, 0);
 
                     JSON.parse(resp.users).forEach(function(user) {
                         users[user.userId] = {
@@ -65,16 +65,11 @@ function doGet() {
                         }
                     });
 
-                    alert(JSON.stringify(users));
 
                     messageToken = resp.token;
-                    alert(resp.messages);
                     JSON.parse(resp.messages).forEach(function(message) {
                         drawMessage(message);
-                        alert("1 mess");
                     });
-                    alert("Draw message");
-
 
 
                     JSON.parse(resp.editedMessages).forEach(function(editing) {
@@ -119,7 +114,6 @@ function setMessageText(messageId, text) {
 }
 
 function drawMessage(message) {
-    alert(message);
     var messageNode = new MessageNode(message);
 
     messages.insertBefore(messageNode, emptyDiv);

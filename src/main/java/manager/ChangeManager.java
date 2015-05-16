@@ -18,19 +18,20 @@ import java.io.IOException;
  * Created by User on 15.05.15.
  */
 public class ChangeManager {
-    public static void changeMessageRequest(HttpServletRequest req, HttpServletResponse resp){
-       JSONObject jsonObject = JSONConverter.getParameter(req);
+
+    public static void changeMessageRequest(HttpServletRequest req, HttpServletResponse resp, JSONObject jsonObject ){
         if (jsonObject != null) {
             int messId = ((Long) ((JSONObject) jsonObject.get("message")).get("messageId")).intValue();
             String text = (String) ((JSONObject) jsonObject.get("message")).get("messageText");
             DatabaseHelper.addNewChange(new ProtocolObject("editMess", text, messId));
         }
     }
-    public static void changeUserRequest(HttpServletRequest req, HttpServletResponse resp){
-        JSONObject jsonObject = JSONConverter.getParameter(req);
-        if (jsonObject != null){
-            int userId = ((Long)((JSONObject)jsonObject.get("user")).get("userId")).intValue();
-            String username = (String)((JSONObject)jsonObject.get("user")).get("username");
+
+    public static void changeUserRequest(HttpServletRequest req, HttpServletResponse resp, JSONObject jsonObject ){
+        if (jsonObject != null) {
+            int userId = ((Long) ((JSONObject) jsonObject.get("user")).get("userId")).intValue();
+            String username = (String) ((JSONObject) jsonObject.get("user")).get("username");
+
             DatabaseHelper.editUser(username, userId);
             DatabaseHelper.addNewChange(new ProtocolObject("editUser", userId, username));
         }

@@ -1,6 +1,8 @@
 package listener;
 
-import requests.UpdateRequest;
+
+import manager.RequestManager;
+import servlet.AsyncRequestProcessor;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -18,7 +20,6 @@ import java.sql.Connection;
  */
 @WebListener
 public class AppAsyncListener implements AsyncListener {
-
 
     @Override
     public void onComplete(AsyncEvent asyncEvent) throws IOException {
@@ -41,9 +42,11 @@ public class AppAsyncListener implements AsyncListener {
     @Override
     public void onTimeout(AsyncEvent asyncEvent) throws IOException {
         System.out.println("AppAsyncListener onTimeout");
+        AsyncContext ac = asyncEvent.getAsyncContext();
+        RequestManager.updateRequest((HttpServletRequest) ac.getRequest(),
+                (HttpServletResponse) ac.getResponse());
+        AsyncRequestProcessor.removeContext(ac);
         //we can send appropriate response to client
-
-
     }
 
 }

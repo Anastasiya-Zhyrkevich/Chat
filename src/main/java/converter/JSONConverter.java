@@ -24,7 +24,7 @@ public class JSONConverter {
             tempObject.put("messageId",  msg.getId());
             tempObject.put("messageText", msg.getText());
             tempObject.put("messageTime", msg.getTime());
-            tempObject.put("isDeleted", "false");           //temporary
+            tempObject.put("isDeleted", 0);                  //temporary
             jsonArray.add(tempObject);
         }
         return jsonArray.toJSONString();
@@ -54,7 +54,7 @@ public class JSONConverter {
             JSONObject tempObject = new JSONObject();
             tempObject.put("userId", user.getId());
             tempObject.put("username", user.getUserName());
-            tempObject.put("userImage", "d:\\Time\\UP\\Chat\\img\\images2");
+            tempObject.put("userImage", "d://Time/UP/Chat/img/images2");
             jsonArray.add(tempObject);
         }
         return jsonArray.toJSONString();
@@ -66,7 +66,7 @@ public class JSONConverter {
             BufferedReader br = req.getReader();
             JSONParser parser = new JSONParser();
             try {
-                jsonObject= (JSONObject) parser.parse(br.readLine());
+                jsonObject = (JSONObject) parser.parse(br.readLine());
             } catch (ParseException e) {
                 e.printStackTrace();
             }

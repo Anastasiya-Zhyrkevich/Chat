@@ -1,6 +1,6 @@
 package servlet;
 
-import requests.UpdateRequest;
+import manager.RequestManager;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
@@ -9,33 +9,45 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.LinkedList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by User on 10.05.15.
  */
+
 public class AsyncRequestProcessor {
 
-    private static LinkedList <AsyncContext> storage = new LinkedList<AsyncContext>();
+    private static LinkedBlockingQueue<AsyncContext> storage = new LinkedBlockingQueue<AsyncContext>();
 
     public static void addContext(AsyncContext ac)
     {
-        storage.add(ac);
+        try {
+            storage.put(ac);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeContext(AsyncContext ac)
+    {
+        storage.remove(ac);
     }
 
     public static void notifyAllUsers(){
         System.out.println(storage.size());
-        for (AsyncContext ac: storage){
+        while (!storage.isEmpty()){
             try {
-                UpdateRequest.proceedUpdateRequest(
-                        (HttpServletRequest) ac.getRequest(),
-                        (HttpServletResponse) ac.getResponse());
+                AsyncContext ac = null;
+                ac = storage.take();
+                RequestManager.updateRequest( (HttpServletRequest) ac.getRequest(),
+                    (HttpServletResponse) ac.getResponse());
                 ac.complete();
-            }
-            catch (IOException e){
-                e.printStackTrace();
+            } catch (InterruptedException e) {
+               e.printStackTrace();
             }
         }
-        storage.clear();
+
     }
 
 }
