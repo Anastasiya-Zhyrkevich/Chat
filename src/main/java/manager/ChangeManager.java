@@ -21,7 +21,7 @@ public class ChangeManager {
 
     public static void changeMessageRequest(HttpServletRequest req, HttpServletResponse resp, JSONObject jsonObject ){
         if (jsonObject != null) {
-            int messId = ((Long) ((JSONObject) jsonObject.get("message")).get("messageId")).intValue();
+            int messId = Integer.parseInt((String) ((JSONObject) jsonObject.get("message")).get("messageId"));
             String text = (String) ((JSONObject) jsonObject.get("message")).get("messageText");
             DatabaseHelper.addNewChange(new ProtocolObject("editMess", text, messId));
         }

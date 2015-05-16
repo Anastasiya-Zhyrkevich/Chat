@@ -32,7 +32,9 @@ public class Servlet extends HttpServlet {
         String type = req.getParameter("type");
         if (type.compareTo("GET_UPDATE") == 0 && Integer.parseInt(req.getParameter("token")) != 0)
         {
-            AsyncContext ac = req.startAsync((ServletRequest) req, (ServletResponse) req);
+            req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
+            AsyncContext ac = req.startAsync();
+            ac.setTimeout(100000);
             ac.addListener(new AppAsyncListener());
             AsyncRequestProcessor.addContext(ac);
         }

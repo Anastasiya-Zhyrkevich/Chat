@@ -81,7 +81,6 @@ public final class DatabaseHelper {
     public static void editUser(String userName, int userId) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -92,7 +91,6 @@ public final class DatabaseHelper {
                 stmt.setString(1, userName);
                 stmt.setInt(2, userId);
                 stmt.executeUpdate();
-                rs.close();
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
