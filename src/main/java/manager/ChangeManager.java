@@ -1,5 +1,6 @@
 package manager;
 
+import converter.JSONConverter;
 import database.DatabaseHelper;
 import instances.Message;
 import instances.ProtocolObject;
@@ -37,19 +38,12 @@ public class ChangeManager {
     }
     public static void changeUserRequest(HttpServletRequest req, HttpServletResponse resp){
         try {
-            BufferedReader br = req.getReader();
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = (JSONObject)parser.parse(br.readLine());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            JSONObject jsonObject = JSONConverter.getParameter(req);
             int userId = ((Long)((JSONObject)jsonObject.get("user")).get("userId")).intValue();
             String username = (String)((JSONObject)jsonObject.get("user")).get("username");
             DatabaseHelper.editUser(username, userId);
             DatabaseHelper.addNewChange(new ProtocolObject("editUser", userId, username));
-            br.close();
+       
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,8 +66,11 @@ public class ChangeManager {
         }
     }
     public static void sendMessageRequest(HttpServletRequest req, HttpServletResponse resp){
-        Message msg = new Message(req.getParameter("messageText"),
-                Integer.parseInt(req.getParameter("userId")), (int)(System.currentTimeMillis()));
+        System.out.println(req.getParameter("userId"));
+        JSONObject jsonObject = JSONConverter.getParameter(req);
+        Message msg = new Message((String)jsonObject.get("messageText"),
+                Integer.parseInt((String)jsonObject.get("userId")), (int)(System.currentTimeMillis()));
         DatabaseHelper.addNewChange(new ProtocolObject("sendMess", msg));
     }
+
 }

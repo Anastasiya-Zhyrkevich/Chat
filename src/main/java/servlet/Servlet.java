@@ -34,6 +34,7 @@ public class Servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ChangeManager.sendMessageRequest(req, resp);
+        System.out.println("doPost");
     }
 
     @Override

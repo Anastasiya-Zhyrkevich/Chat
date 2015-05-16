@@ -62,26 +62,23 @@ public final class DatabaseHelper {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             userId = getNextFreeLine("users");
-            String sql = "INSERT INTO users (user_id, username) VALUES (?,?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
-            stmt.setString(2, userName);
-            stmt.executeUpdate();
-            addNewChange(new ProtocolObject("newUser", userId, userName));
-        } catch (Exception se) {
-            se.printStackTrace();
-        } finally {
             try {
+                String sql = "INSERT INTO users (user_id, username) VALUES (?,?)";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, userId);
+                stmt.setString(2, userName);
+                stmt.executeUpdate();
+                addNewChange(new ProtocolObject("newUser", userId, userName));
                 rs.close();
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        } catch (Exception se) {
+            se.printStackTrace();
         }
         return userId;
-
-
     }
     public static void editUser(String userName, int userId) {
         Connection conn = null;
@@ -91,21 +88,20 @@ public final class DatabaseHelper {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             userId = getNextFreeLine("users");
-            String sql = "UPDATE users SET username = ? WHERE user_id = ? ";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, userName);
-            stmt.setInt(2, userId);
-            stmt.executeUpdate();
-        } catch (Exception se) {
-            se.printStackTrace();
-        } finally {
-            try {
+            try{
+                String sql = "UPDATE users SET username = ? WHERE user_id = ? ";
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, userName);
+                stmt.setInt(2, userId);
+                stmt.executeUpdate();
                 rs.close();
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        } catch (Exception se) {
+            se.printStackTrace();
         }
     }
 
@@ -118,20 +114,19 @@ public final class DatabaseHelper {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String sql = "SELECT COUNT(*) FROM " + tableName;
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-            rs.next();
-            nextFree = Integer.parseInt(rs.getString(1)) + 1;
-        } catch (Exception se) {
-            se.printStackTrace();
-        } finally {
-            try {
+            try{
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery();
+                rs.next();
+                nextFree = Integer.parseInt(rs.getString(1)) + 1;
                 rs.close();
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        } catch (Exception se) {
+            se.printStackTrace();
         }
         return nextFree;
     }
@@ -143,25 +138,25 @@ public final class DatabaseHelper {
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "INSERT INTO protocol (id, type, user_id, text, mess_id) VALUES (?,?,?,?,?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, getNextFreeLine("protocol"));
-            stmt.setString(2,obj.getType());
-            stmt.setInt(3, obj.getUserId());
-            stmt.setString(4,obj.getText());
-            stmt.setInt(5, obj.getAddInfo());
-            stmt.executeUpdate();
-        } catch (Exception se) {
-            se.printStackTrace();
-        } finally {
-            try {
+            try{
+                String sql = "INSERT INTO protocol (id, type, user_id, text, mess_id) VALUES (?,?,?,?,?)";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, getNextFreeLine("protocol"));
+                stmt.setString(2, obj.getType());
+                stmt.setInt(3, obj.getUserId());
+                stmt.setString(4, obj.getText());
+                stmt.setInt(5, obj.getAddInfo());
+                stmt.executeUpdate();
                 rs.close();
                 stmt.close();
                 conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }catch (SQLException e) {
+                    e.printStackTrace();
             }
+        } catch (Exception se) {
+            se.printStackTrace();
         }
+
     }
     public static LinkedList<Message> getMessages(int firstToken, int lastToken){
         LinkedList <Message> result = new LinkedList();

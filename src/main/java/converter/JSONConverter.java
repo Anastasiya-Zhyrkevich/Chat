@@ -4,7 +4,12 @@ import instances.Message;
 import instances.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -52,6 +57,23 @@ public class JSONConverter {
             jsonArray.add(tempObject);
         }
         return jsonArray.toJSONString();
+    }
+
+    public static JSONObject getParameter(HttpServletRequest req){
+        JSONObject jsonObject = null;
+        try{
+            BufferedReader br = req.getReader();
+            JSONParser parser = new JSONParser();
+            try {
+                jsonObject= (JSONObject) parser.parse(br.readLine());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 
 }
