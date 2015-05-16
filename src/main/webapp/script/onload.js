@@ -25,7 +25,7 @@ function doGet() {
             showServerState(true);
             if(xhr.readyState == 4) {
                 var resp = JSON.parse(xhr.responseText);
-                {
+
                     JSON.parse(resp.users).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
@@ -43,9 +43,8 @@ function doGet() {
                     });
 
 
-                }
 
-                {
+
                     JSON.parse(resp.changedUsers).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
@@ -65,30 +64,33 @@ function doGet() {
                             }
                         }
                     });
-                }
 
-                {
+                    alert(JSON.stringify(users));
+
                     messageToken = resp.token;
+                    alert(resp.messages);
                     JSON.parse(resp.messages).forEach(function(message) {
                         drawMessage(message);
+                        alert("1 mess");
                     });
-                }
+                    alert("Draw message");
 
-                 {
+
+
                     JSON.parse(resp.editedMessages).forEach(function(editing) {
                         setMessageText(editing.messageId, editing.messageText);
                     });
-                }
 
-                {
+
+
                     JSON.parse(resp.deletedMessagesIds).forEach(function(id) {
                         makeMessageDeleted(id);
                     });
-                }
 
 
 
-                {
+
+
                     JSON.parse(resp.changedUsers).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
@@ -103,7 +105,7 @@ function doGet() {
                             }
                         }
                     });
-                }
+
             }
         }
         else {
@@ -117,6 +119,7 @@ function setMessageText(messageId, text) {
 }
 
 function drawMessage(message) {
+    alert(message);
     var messageNode = new MessageNode(message);
 
     messages.insertBefore(messageNode, emptyDiv);

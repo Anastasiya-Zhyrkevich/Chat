@@ -54,6 +54,7 @@ public class JSONConverter {
             JSONObject tempObject = new JSONObject();
             tempObject.put("userId", user.getId());
             tempObject.put("username", user.getUserName());
+            tempObject.put("userImage", "d:\\Time\\UP\\Chat\\img\\images2");
             jsonArray.add(tempObject);
         }
         return jsonArray.toJSONString();

@@ -19,33 +19,20 @@ import java.io.IOException;
  */
 public class ChangeManager {
     public static void changeMessageRequest(HttpServletRequest req, HttpServletResponse resp){
-        try {
-            BufferedReader br = req.getReader();
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = (JSONObject)parser.parse(br.readLine());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            int messId = ((Long)((JSONObject)jsonObject.get("message")).get("messageId")).intValue();
-            String text = (String)((JSONObject)jsonObject.get("message")).get("messageText");
+       JSONObject jsonObject = JSONConverter.getParameter(req);
+        if (jsonObject != null) {
+            int messId = ((Long) ((JSONObject) jsonObject.get("message")).get("messageId")).intValue();
+            String text = (String) ((JSONObject) jsonObject.get("message")).get("messageText");
             DatabaseHelper.addNewChange(new ProtocolObject("editMess", text, messId));
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
     public static void changeUserRequest(HttpServletRequest req, HttpServletResponse resp){
-        try {
-            JSONObject jsonObject = JSONConverter.getParameter(req);
+        JSONObject jsonObject = JSONConverter.getParameter(req);
+        if (jsonObject != null){
             int userId = ((Long)((JSONObject)jsonObject.get("user")).get("userId")).intValue();
             String username = (String)((JSONObject)jsonObject.get("user")).get("username");
             DatabaseHelper.editUser(username, userId);
             DatabaseHelper.addNewChange(new ProtocolObject("editUser", userId, username));
-       
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
     public static void deleteMessageRequest(HttpServletRequest req, HttpServletResponse resp){
@@ -66,10 +53,9 @@ public class ChangeManager {
         }
     }
     public static void sendMessageRequest(HttpServletRequest req, HttpServletResponse resp){
-        System.out.println(req.getParameter("userId"));
         JSONObject jsonObject = JSONConverter.getParameter(req);
         Message msg = new Message((String)jsonObject.get("messageText"),
-                Integer.parseInt((String)jsonObject.get("userId")), (int)(System.currentTimeMillis()));
+                ((Long)jsonObject.get("userId")).intValue(), (int)(System.currentTimeMillis()));
         DatabaseHelper.addNewChange(new ProtocolObject("sendMess", msg));
     }
 

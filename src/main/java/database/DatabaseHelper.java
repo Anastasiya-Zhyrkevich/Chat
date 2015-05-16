@@ -56,7 +56,6 @@ public final class DatabaseHelper {
     public static int registerNewUser(String userName){
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int userId = 0;
         try {
             Class.forName(JDBC_DRIVER);
@@ -69,7 +68,6 @@ public final class DatabaseHelper {
                 stmt.setString(2, userName);
                 stmt.executeUpdate();
                 addNewChange(new ProtocolObject("newUser", userId, userName));
-                rs.close();
                 stmt.close();
                 conn.close();
             } catch (SQLException e) {
@@ -133,7 +131,6 @@ public final class DatabaseHelper {
     public static void addNewChange(ProtocolObject obj){
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int userId = 0;
         try {
             Class.forName(JDBC_DRIVER);
@@ -147,7 +144,6 @@ public final class DatabaseHelper {
                 stmt.setString(4, obj.getText());
                 stmt.setInt(5, obj.getAddInfo());
                 stmt.executeUpdate();
-                rs.close();
                 stmt.close();
                 conn.close();
             }catch (SQLException e) {
