@@ -34,7 +34,7 @@ public class Servlet extends HttpServlet {
         {
             req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
             AsyncContext ac = req.startAsync();
-            ac.setTimeout(100000);
+            ac.setTimeout(10);
             ac.addListener(new AppAsyncListener());
             AsyncRequestProcessor.addContext(ac);
         }
