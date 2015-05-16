@@ -77,11 +77,7 @@ function showUsernameForm(isChanging) {
                 if(xhr.readyState == 4) {
                     var resp = JSON.parse(xhr.responseText);
                     usernameId = resp.currentUserId;
-                    messageToken = resp.messageToken;
-                    messageEditToken = resp.messageEditToken;
-                    messageDeleteToken = resp.messageDeleteToken;
-                    userToken = resp.userToken;
-                    userChangeToken = resp.userChangeToken;
+                    messageToken = resp.token;
                     document.body.removeChild(background);
                     textarea.focus();
                     startGettingMessages();

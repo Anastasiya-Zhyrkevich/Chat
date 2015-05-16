@@ -23,10 +23,6 @@ var hint = get('username-hint');
 
 var users = {};
 var messageToken;
-var messageEditToken;
-var messageDeleteToken;
-var userToken;
-var userChangeToken;
 
 var host = "http://localhost";
 var port = ":8080";

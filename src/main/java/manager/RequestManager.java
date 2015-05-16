@@ -17,11 +17,7 @@ public class RequestManager {
         String userName = req.getParameter("username");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("currentUserId", DatabaseHelper.registerUser(userName));
-        jsonObject.put("messageToken", 0);
-        jsonObject.put("messageEditToken", 0);
-        jsonObject.put("messageDeleteToken", 0);
-        jsonObject.put("userToken", 0);
-        jsonObject.put("userChangeToken", 0);
+        jsonObject.put("token", 1);
         sendResponse(resp, jsonObject.toJSONString());
     }
     public static void updateRequest(HttpServletRequest req, HttpServletResponse resp){
@@ -40,7 +36,6 @@ public class RequestManager {
         jsonObject.put("users", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "newUser")));
 
         jsonObject.put("changedUsers", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "editUser")));
-
         sendResponse(resp, jsonObject.toJSONString());
 
     }

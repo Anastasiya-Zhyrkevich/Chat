@@ -15,11 +15,7 @@ function stopGettingMessages() {
 
 function doGet() {
     var params = 	'?type=GET_UPDATE' +
-        '&messageToken=' + messageToken +
-        '&messageEditToken=' + messageEditToken +
-        '&messageDeleteToken=' + messageDeleteToken +
-        '&userToken=' + userToken +
-        '&userChangeToken=' + userChangeToken;
+        '&token=' + messageToken;
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', host + port + adr + params, true);
@@ -29,8 +25,7 @@ function doGet() {
             showServerState(true);
             if(xhr.readyState == 4) {
                 var resp = JSON.parse(xhr.responseText);
-                if(resp.userToken) {
-                    userToken = resp.userToken;
+                {
                     JSON.parse(resp.users).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
@@ -50,8 +45,7 @@ function doGet() {
 
                 }
 
-                if(resp.userChangeToken) {
-                    userChangeToken = resp.userChangeToken;
+                {
                     JSON.parse(resp.changedUsers).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
@@ -73,22 +67,20 @@ function doGet() {
                     });
                 }
 
-                if(resp.messageToken) {
-                    messageToken = resp.messageToken;
+                {
+                    messageToken = resp.token;
                     JSON.parse(resp.messages).forEach(function(message) {
                         drawMessage(message);
                     });
                 }
 
-                if(resp.messageEditToken) {
-                    messageEditToken = resp.messageEditToken;
+                 {
                     JSON.parse(resp.editedMessages).forEach(function(editing) {
                         setMessageText(editing.messageId, editing.messageText);
                     });
                 }
 
-                if(resp.messageDeleteToken) {
-                    messageDeleteToken = resp.messageDeleteToken;
+                {
                     JSON.parse(resp.deletedMessagesIds).forEach(function(id) {
                         makeMessageDeleted(id);
                     });
@@ -96,8 +88,7 @@ function doGet() {
 
 
 
-                if(resp.userChangeToken) {
-                    userChangeToken = resp.userChangeToken;
+                {
                     JSON.parse(resp.changedUsers).forEach(function(user) {
                         users[user.userId] = {
                             "username":user.username,
