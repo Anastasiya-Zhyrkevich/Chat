@@ -4,14 +4,16 @@ package instances;
  * Created by User on 15.05.15.
  */
 public class Message {
-    private int id = 0;
+    private int id;
     private String text;
     private int userId;
-    private int time = 0;
+    private int time;
 
     public Message(String text, int userId, int time){
+        this.id = 0;
         this.text = text;
         this.userId = userId;
+        this.time = time;
     }
 
     public Message(int id, String text, int userId, int time){
@@ -25,6 +27,7 @@ public class Message {
         this.id = id;
         this.text = text;
         this.userId = userId;
+        this.time = 0;
     }
 
     public void setTime(int time){

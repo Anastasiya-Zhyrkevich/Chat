@@ -4,19 +4,21 @@ package instances;
  * Created by User on 15.05.15.
  */
 public class ProtocolObject {
-    private int id = 0;
-    private String type = new String();
+    private int id;
+    private String type;
     private int userId;
     private String text;
     private int addInfo = 0;
 
     public ProtocolObject(String type, int userId, String text, int addInfo){
+        this.id = 0;
         this.type = type;
         this.text = text;
         this.userId = userId;
         this.addInfo = addInfo;
     }
     public ProtocolObject(String type, Message msg){
+        this.id = 0;
         this.type = type;
         this.text = msg.getText();
         this.userId = msg.getUserId();
@@ -24,13 +26,25 @@ public class ProtocolObject {
     }
 
     public ProtocolObject(String type, int userId, String text){
+        this.id = 0;
         this.type = type;
         this.text = text;
         this.userId = userId;
+        this.addInfo = 0;
+    }
+    public ProtocolObject(String type,  String text, int addInfo){
+        this.id = 0;
+        this.type = type;
+        this.text = text;
+        this.userId = 0;
+        this.addInfo = addInfo;
     }
 
     public ProtocolObject(String type, int messId){
+        this.id = 0;
         this.type = type;
+        this.text = new String();
+        this.userId = 0;
         this.addInfo = messId;
     }
 

@@ -28,7 +28,7 @@ public final class DatabaseHelper {
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "SELECT used_id FROM users WHERE username = ?";
+            String sql = "SELECT user_id FROM users WHERE username = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, userName);
             rs = stmt.executeQuery();
