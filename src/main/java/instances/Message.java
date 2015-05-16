@@ -9,10 +9,24 @@ public class Message {
     private int userId;
     private int time = 0;
 
-    public Message(String text, int userId){
+    public Message(String text, int userId, int time){
         this.text = text;
         this.userId = userId;
     }
+
+    public Message(int id, String text, int userId, int time){
+        this.id = id;
+        this.text = text;
+        this.userId = userId;
+        this.time = time;
+    }
+
+    public Message(int id, String text, int userId){
+        this.id = id;
+        this.text = text;
+        this.userId = userId;
+    }
+
     public void setTime(int time){
        this.time = time;
     }

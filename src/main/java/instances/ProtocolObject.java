@@ -5,7 +5,7 @@ package instances;
  */
 public class ProtocolObject {
     private int id = 0;
-    private String type;
+    private String type = new String();
     private int userId;
     private String text;
     private int addInfo = 0;
@@ -16,11 +16,22 @@ public class ProtocolObject {
         this.userId = userId;
         this.addInfo = addInfo;
     }
+    public ProtocolObject(String type, Message msg){
+        this.type = type;
+        this.text = msg.getText();
+        this.userId = msg.getUserId();
+        this.addInfo = msg.getTime();
+    }
 
     public ProtocolObject(String type, int userId, String text){
         this.type = type;
         this.text = text;
         this.userId = userId;
+    }
+
+    public ProtocolObject(String type, int messId){
+        this.type = type;
+        this.addInfo = messId;
     }
 
     public int getAddInfo() {
@@ -58,4 +69,6 @@ public class ProtocolObject {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

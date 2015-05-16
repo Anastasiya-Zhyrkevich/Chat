@@ -1,6 +1,11 @@
 package servlet;
 
+import database.DatabaseHelper;
+import instances.Message;
+import instances.ProtocolObject;
 import managers.RequestManager;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.HashMap;
@@ -29,7 +34,9 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        Message msg = new Message(req.getParameter("messageText"),
+                Integer.parseInt(req.getParameter("userId")), (int)(System.currentTimeMillis()));
+        DatabaseHelper.addNewChange(new ProtocolObject("sendMess", msg));
     }
 
     @Override
@@ -39,7 +46,14 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        try{
+            BufferedReader br = req.getReader();
+            JSONParser parser = new JSONParser();
+            try {
+                JSONArray jsonArray = (JSONArray)parser.parse(br.readLine());
+                for (Object s: jsonArray) {
+                    DatabaseHelper.addNewChange(new ProtocolObject("deleteMess", Integer.parseInt((String)s)));
+                }
     }
 
 
