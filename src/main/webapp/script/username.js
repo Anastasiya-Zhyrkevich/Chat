@@ -1,3 +1,7 @@
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
+
 function setUsername(username) {
     get('userdiv').innerText = username;
     get('userdiv').style.display = '';
@@ -7,61 +11,25 @@ function Background() {
     return create('div', 'modal-background');
 }
 
-function UsernameForm() {
-    var container = create('div', 'entering');
-
-    var p = create('p');
-    p.innerText = 'Username:';
-
-    var input = create('input');
-    input.type = 'text';
-    input.placeholder = 'Enter username';
-
-
-    var button = create('button');
-    button.innerText = 'Enter';
-
-    container.appendChild(p);
-    container.appendChild(input);
-    container.appendChild(button);
-
-    return {
-        "container":container,
-        "input":input,
-        "button":button
-    };
-}
-
 function showUsernameForm(isChanging) {
     get('userdiv').style.display = 'none';
 
     var background = new Background();
-    var usernameForm = new UsernameForm();
 
-    background.appendChild(usernameForm.container);
-    document.body.appendChild(background);
-
-    usernameForm.input.focus();
-
-    if(isChanging) {
-        usernameForm.button.onclick = function() {
-            var text = usernameForm.input.value;
-            if(!text) {
-                return;
-            }
-
-            changeUsername(text);
+    if (isChanging) {
+        window.history.back(-1);
+        var text = getURLParameter("loginName");
+        if (!text) {
+            return;
         }
+        changeUsername(text);
     }
     else {
-        usernameForm.button.onclick = function() {
-            var text = usernameForm.input.value;
-            if(!text) {
-                return;
-            }
-
-            enter(text);
+        var text = getURLParameter("loginName");
+        if (!text) {
+            return;
         }
+        enter(text);
     }
 
     function enter(username) {
@@ -70,16 +38,14 @@ function showUsernameForm(isChanging) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', host + port + adr + params, true);
         xhr.send();
-        xhr.onreadystatechange = function() {
-            if(xhr.status == 200) {
+        xhr.onreadystatechange = function () {
+            if (xhr.status == 200) {
                 showServerState(true);
 
-                if(xhr.readyState == 4) {
+                if (xhr.readyState == 4) {
                     var resp = JSON.parse(xhr.responseText);
                     usernameId = resp.currentUserId;
                     messageToken = resp.token;
-                    document.body.removeChild(background);
-                    textarea.focus();
                     startGettingMessages();
                 }
             }
@@ -97,16 +63,14 @@ function showUsernameForm(isChanging) {
         requestBody.user.userId = usernameId;
         requestBody.user.username = username;
 
-        alert('PUT-request:\n' + JSON.stringify(requestBody));
-
         var xhr = new XMLHttpRequest();
         xhr.open('PUT', host + port + adr, true);
         xhr.send(JSON.stringify(requestBody));
-        xhr.onreadystatechange = function() {
-            if(xhr.status == 200) {
+        xhr.onreadystatechange = function () {
+            if (xhr.status == 200) {
                 showServerState(true);
 
-                if(xhr.readyState == 4) {
+                if (xhr.readyState == 4) {
                     document.body.removeChild(background);
                     textarea.focus();
                 }

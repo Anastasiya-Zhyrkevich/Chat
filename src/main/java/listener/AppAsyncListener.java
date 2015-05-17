@@ -1,19 +1,18 @@
 package listener;
 
 
+import exception.ManagerException;
 import manager.RequestManager;
-import servlet.AsyncRequestProcessor;
+import org.apache.log4j.Logger;
+import util.AsyncRequestProcessor;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
 
 /**
  * Created by User on 10.05.15.
@@ -21,30 +20,37 @@ import java.sql.Connection;
 @WebListener
 public class AppAsyncListener implements AsyncListener {
 
+    private static final Logger logger = Logger.getRootLogger();
+
+
     @Override
     public void onComplete(AsyncEvent asyncEvent) throws IOException {
-        System.out.println("AppAsyncListener onComplete");
+       logger.debug("AppAsyncListener onComplete");
         // we can do resource cleanup activity here
     }
 
     @Override
     public void onError(AsyncEvent asyncEvent) throws IOException {
-        System.out.println("AppAsyncListener onError");
+        logger.debug("AppAsyncListener onError");
         //we can return error response to client
     }
 
     @Override
     public void onStartAsync(AsyncEvent asyncEvent) throws IOException {
-        System.out.println("AppAsyncListener onStartAsync");
+        logger.debug("AppAsyncListener onStartAsync");
         //we can log the event here
     }
 
     @Override
     public void onTimeout(AsyncEvent asyncEvent) throws IOException {
-        System.out.println("AppAsyncListener onTimeout");
+        logger.debug("AppAsyncListener onTimeout");
         AsyncContext ac = asyncEvent.getAsyncContext();
-        RequestManager.updateRequest((HttpServletRequest) ac.getRequest(),
-                (HttpServletResponse) ac.getResponse());
+        try {
+            RequestManager.updateRequest((HttpServletRequest) ac.getRequest(),
+                    (HttpServletResponse) ac.getResponse());
+        } catch (ManagerException e) {
+            logger.error(e);
+        }
         AsyncRequestProcessor.removeContext(ac);
         //we can send appropriate response to client
     }

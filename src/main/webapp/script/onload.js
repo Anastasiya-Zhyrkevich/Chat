@@ -10,7 +10,6 @@ function stopGettingMessages() {
     clearTimeout(timer);
 }
 
-
 function doGet() {
     var params = 	'?type=GET_UPDATE' +
         '&token=' + messageToken;
