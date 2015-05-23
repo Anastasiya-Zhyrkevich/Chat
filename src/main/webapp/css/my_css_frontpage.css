@@ -1,0 +1,101 @@
+.main-title-block
+{
+	box-sizing: border-box; 
+	padding: 20px;
+
+	background-color : #3333FF;
+	height: 100px;
+	border-radius: 10px;
+	border:5px solid white;
+}
+
+.title-style
+{
+	font-size: 28px;
+	text-align:center;
+	
+}
+.my-button
+{
+	box-sizing: border-box;  
+	padding: 20px;
+	border:5px solid white;
+} 
+.my-avatar-photo
+{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;	
+}
+
+.friend-profile
+{
+	height: 100px;
+	background-color : rgb(175,238,238);
+}
+
+
+.message-time
+{
+	font-size: 14px;
+	font-weight: bold
+}
+
+.message-field
+{
+	 width: 500px;
+}
+
+.centered
+{
+    text-align:center;
+}
+.vertical-center
+{	
+	vertical-align: middle;
+}
+.fixed-height
+{
+	height: 100px;
+}
+
+.message-area 
+{
+    height: 350px;
+	background-color : rgb(127, 255, 212);
+	overflow-y:scroll;
+}
+
+.message-text
+{
+	box-sizing: border-box; 
+	margin_left: 1px;
+	margin-right: 50px;
+	word-wrap: break-word;
+}
+
+.message-username
+{
+	font-weight: bold;
+}
+
+
+.message
+{
+	box-sizing: border-box;  
+	padding: 7px;
+	width: 450px;
+	border-radius: 10px;
+}
+
+.my-message 
+{
+    background-color: #98FB98;
+}
+
+.friend-message 
+{
+    background-color: #87CEFA;
+}
+
+
