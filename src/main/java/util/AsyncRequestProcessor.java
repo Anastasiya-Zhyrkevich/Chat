@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -21,15 +21,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class AsyncRequestProcessor {
 
     private static final Logger logger = Logger.getRootLogger();
-    private static LinkedBlockingQueue<AsyncContext> storage = new LinkedBlockingQueue<AsyncContext>();
+    //private static LinkedBlockingQueue<AsyncContext> storage = new LinkedBlockingQueue<AsyncContext>();
+    private static List<AsyncContext> storage = Collections.synchronizedList(new ArrayList<AsyncContext>());
+    private static List<AsyncContext> tempstorage = Collections.synchronizedList(new ArrayList<AsyncContext>());
+    private static boolean inProcess = false;
+
+
 
     public static void addContext(AsyncContext ac)
     {
-        try {
-            storage.put(ac);
-        } catch (InterruptedException e) {
-            logger.error(e);
-        }
+            if (inProcess == false){
+                storage.add(ac);
+            }
+            else{
+                storage.add(ac);
+            }
+
     }
 
     public static void removeContext(AsyncContext ac)
@@ -37,7 +44,7 @@ public class AsyncRequestProcessor {
         storage.remove(ac);
     }
 
-    public static void notifyAllUsers() throws ManagerException {
+    /*public static void notifyAllUsers() throws ManagerException {
         while (!storage.isEmpty()){
             try {
                 AsyncContext ac = null;
@@ -50,6 +57,25 @@ public class AsyncRequestProcessor {
             }
         }
 
+    }*/
+
+    public static void clearContainer() throws ManagerException{
+        storage.clear();
+        for (AsyncContext ac: tempstorage){
+            storage.add(ac);
+        }
+        tempstorage.clear();
+    }
+
+    public static void notifyAllUsers() throws ManagerException {
+        inProcess = true;
+        for (AsyncContext ac: storage) {
+            RequestManager.updateRequest((HttpServletRequest) ac.getRequest(),
+                    (HttpServletResponse) ac.getResponse());
+            ac.complete();
+        }
+        clearContainer();
+        inProcess = false;
     }
 
 }

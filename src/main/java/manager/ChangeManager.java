@@ -53,7 +53,7 @@ public class ChangeManager {
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(br.readLine());
             for (Object s : jsonArray) {
-                DatabaseHelper.addNewChange(new ClientProtocol("deleteMess", Integer.parseInt((String) s)));
+                DatabaseHelper.addNewChange(new ClientProtocol("deleteMess", Long.parseLong((String) s)));
             }
             br.close();
         } catch (IOException e) {
@@ -68,7 +68,7 @@ public class ChangeManager {
     public static void sendMessageRequest(HttpServletRequest req, HttpServletResponse resp) throws ManagerException {
         JSONObject jsonObject = JSONConverter.getParameter(req);
         Message msg = new Message((String) jsonObject.get("messageText"),
-                ((Long) jsonObject.get("userId")).intValue(), (int) (System.currentTimeMillis()));
+                ((Long) jsonObject.get("userId")).intValue(), (Long) (System.currentTimeMillis()));
         try {
             DatabaseHelper.addNewChange(new ClientProtocol("sendMess", msg));
         } catch (DatabaseException e) {

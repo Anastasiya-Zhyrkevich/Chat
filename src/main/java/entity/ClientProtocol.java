@@ -8,7 +8,7 @@ public class ClientProtocol {
     private String type;
     private int userId;
     private String text;
-    private int addInfo = 0;
+    private long addInfo = 0;
 
     public ClientProtocol(String type, Message msg){
         this.id = 0;
@@ -25,7 +25,7 @@ public class ClientProtocol {
         this.userId = userId;
         this.addInfo = 0;
     }
-    public ClientProtocol(String type, String text, int addInfo){
+    public ClientProtocol(String type, String text, long addInfo){
         this.id = 0;
         this.type = type;
         this.text = text;
@@ -33,7 +33,7 @@ public class ClientProtocol {
         this.addInfo = addInfo;
     }
 
-    public ClientProtocol(String type, int messId){
+    public ClientProtocol(String type, long messId){
         this.id = 0;
         this.type = type;
         this.text = new String();
@@ -41,7 +41,7 @@ public class ClientProtocol {
         this.addInfo = messId;
     }
 
-    public int getAddInfo() {
+    public long getAddInfo() {
         return addInfo;
     }
 

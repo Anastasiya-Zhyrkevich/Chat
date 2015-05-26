@@ -2,13 +2,15 @@
  * Created by User on 16.05.15.
  */
 
+
 function MessageNode(message){
     var messageNode = document.createElement("div");
     messageNode.id = message.messageId;
+    messageNode.userId = message.userId;
     messageNode.classList.add("message");
 
     var usernameNode = create('div', 'message-username');
-    usernameNode.innerText = users[message.userId].username;
+    usernameNode.innerText = appState.users[message.userId].username;
 
     var textNode = create('div', 'message-text');
     if(message.isDeleted == 1) {
@@ -21,19 +23,21 @@ function MessageNode(message){
 
     var timeNode = create('div', 'message-time');
     var date = new Date(+message.messageTime);
-    timeNode.innerHTML = date.toLocaleTimeString() + "<br>" + date.toLocaleDateString();
+    timeNode.innerHTML = date.toLocaleTimeString() + " " + date.toLocaleDateString();
 
-    if(usernameId == message.userId) {
+    if(appState.usernameId == message.userId) {
         messageNode.classList.add('my-message');
         messageNode.classList.add('pull-right');
 
         if(message.isDeleted == 0) {
             var editButtonFeatures = ["glyphicon-edit"]
-            var editButton = new ChangeButton(editButtonFeatures);
+            var editButton = ChangeButton(editButtonFeatures);
+            editButton.disabled = false;
             editButton.addEventListener('click', editButtonEvent);
 
             var deleteButtonFeatures = ["glyphicon-remove"]
-            var deleteButton = new ChangeButton(deleteButtonFeatures);
+            var deleteButton = ChangeButton(deleteButtonFeatures);
+            deleteButton.disabled = false;
             deleteButton.addEventListener('click', deleteButtonEvent);
 
             messageNode.appendChild(editButton);
@@ -54,12 +58,12 @@ function MessageNode(message){
 
 function ChangeButton(features){
     var button = document.createElement('button');
-    editButton.classList.add("btn");
-    editButton.classList.add("btn-xs");
-    editButton.classList.add("btn-default");
-    editButton.classList.add("pull-right");
-    editButton.classList.add("icon-padding");
-    editButton.typeName = "button";
+    button.classList.add("btn");
+    button.classList.add("btn-xs");
+    button.classList.add("btn-default");
+    button.classList.add("pull-right");
+    button.classList.add("icon-padding");
+    button.typeName = "button";
     var sp = document.createElement('span');
     sp.classList.add("glyphicon");
     sp.classList.add(features[0]);
@@ -69,12 +73,12 @@ function ChangeButton(features){
 }
 
 function addMessageToField(messageNode){
-    field.scrollIntoView(true);
-    field.appendChild(messageNode);
+    appState.field.appendChild(messageNode);
+    messageNode.scrollIntoView(true);
 }
 
 function drawMessage(message){
-    var messageNode = new MessageNode(message);
+    var messageNode = MessageNode(message);
     addMessageToField(messageNode);
 }
 
@@ -107,10 +111,10 @@ function makeMessageDeleted(id){
     }
 }
 
-function clearMessageContainer() {
-    while (field .firstChild) {
-        field .removeChild(field .firstChild);
-    }
+function changeUserName(messageNode){
+    if (messageNode.childNodes.length == 3)
+        messageNode.childNodes[0].innerText = appState.users[messageNode.userId].username;
+    else
+        messageNode.childNodes[2].innerText = appState.users[messageNode.userId].username;
 }
-
 

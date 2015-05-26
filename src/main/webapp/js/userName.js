@@ -3,6 +3,7 @@
  */
 
 function setUsername(username) {
-    userName = username;
+    appState.userName = username;
     document.getElementById("userName").innerText = username;
 }
+

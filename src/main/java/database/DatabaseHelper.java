@@ -57,7 +57,6 @@ public final class DatabaseHelper {
         return userId;
     }
 
-
     public static int registerNewUser(String userName) throws DatabaseException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -83,7 +82,6 @@ public final class DatabaseHelper {
         PreparedStatement stmt = null;
         try {
             conn = ConnectionPool.getInstance().getConnection();
-            userId = getNextFreeLine("users");
             stmt = conn.prepareStatement(SQL_UPDATE_USER_QUERY);
             stmt.setString(1, userName);
             stmt.setInt(2, userId);
@@ -125,7 +123,7 @@ public final class DatabaseHelper {
             stmt.setString(2, obj.getType());
             stmt.setInt(3, obj.getUserId());
             stmt.setString(4, obj.getText());
-            stmt.setInt(5, obj.getAddInfo());
+            stmt.setLong(5, obj.getAddInfo());
             stmt.executeUpdate();
         } catch (SQLException se) {
             throw new DatabaseException("Can't add new change. " + se.getMessage(), se);
@@ -151,7 +149,7 @@ public final class DatabaseHelper {
             while (rs.next()) {
                 Message msg = new Message(Integer.parseInt(rs.getString("id")),
                         rs.getString("text"), Integer.parseInt(rs.getString("user_id")),
-                        Integer.parseInt(rs.getString("mess_id")));
+                        Long.parseLong(rs.getString("mess_id")));
                 result.add(msg);
             }
         } catch (SQLException se) {
@@ -176,7 +174,7 @@ public final class DatabaseHelper {
             stmt.setInt(2, lastToken);
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Message msg = new Message(Integer.parseInt(rs.getString("mess_id")),
+                Message msg = new Message(Long.parseLong(rs.getString("mess_id")),
                         rs.getString("text"), Integer.parseInt(rs.getString("user_id")));
                 result.add(msg);
             }
@@ -188,8 +186,8 @@ public final class DatabaseHelper {
         return result;
     }
 
-    public static List<Integer> getDeleted(int firstToken, int lastToken) throws DatabaseException {
-        List<Integer> result = new LinkedList<Integer>();
+    public static List<Long> getDeleted(int firstToken, int lastToken) throws DatabaseException {
+        List<Long> result = new LinkedList<Long>();
         if (lastToken < firstToken)
             return result;
         Connection conn = null;
@@ -202,7 +200,7 @@ public final class DatabaseHelper {
             stmt.setInt(2, lastToken);
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Integer messId = Integer.parseInt(rs.getString("mess_id"));
+                Long messId = Long.parseLong(rs.getString("mess_id"));
                 result.add(messId);
             }
         } catch (SQLException se) {

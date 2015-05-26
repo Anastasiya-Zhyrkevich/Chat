@@ -2,28 +2,21 @@
  * Created by User on 19.05.15.
  */
 
-function stopGettingMessages() {
-    clearTimeout(timer);
-}
 
 function startGettingMessages() {
-    var params = '?type=GET_UPDATE' + '&token=' + messageToken;
-    getR(host + port + adr + params, parseGetResponse, continueWithError);
-    timer = setTimeout(function  func () {
-        startGettingMessages();
-        timer = setTimeout(func, 10000);
-    },  10000);
+    var params = '?type=GET_UPDATE' + '&token=' + appState.messageToken;
+    getR(appState.host + appState.port + appState.adr + params, parseGetResponse, continueWithError);
 }
 
 function parseBaseResponse(responseText){
-    alert("Base");
+    //alert("Base");
     var resp = JSON.parse(responseText);
-    usernameId = resp.currentUserId;
-    alert(usernameId);
-    messageToken = resp.token;
-    textarea.focus();
-    sendButton.disabled = false;
-    successAuto = true;
+    appState.usernameId = resp.currentUserId;
+    //alert(appState.usernameId);
+    appState.messageToken = resp.token;
+    appState.textarea.focus();
+    appState.sendButton.disabled = false;
+    appState.successAuto = true;
     startGettingMessages();
 }
 
@@ -32,32 +25,40 @@ function parseGetResponse(responseText){
     //alert("GetResponse");
     var resp = JSON.parse(responseText);
     JSON.parse(resp.users).forEach(function (user) {
-            users[user.userId] = {
+            appState.users[user.userId] = {
                 "username": user.username,
                 "userImage": user.userImage
             };
 
-            if (usernameId == user.userId) {
+            if (appState.usernameId == user.userId) {
                 if (user.username) {
                     setUsername(user.username);
                 }
             }
         });
+        var editedUsersId = [];
 
         JSON.parse(resp.changedUsers).forEach(function (user) {
-            users[user.userId] = {
-                "username": user.username,
-                "userImage": user.userImage
+            appState.users[user.userId] = {
+                "username": user.username
             };
-            if (usernameId == user.userId) {
+            if (appState.usernameId == user.userId) {
                 if (user.username) {
                     setUsername(user.username);
                 }
             }
+            editedUsersId.push(user.userId);
         });
+    if (editedUsersId.length != 0) {
+        for (var i = 0; i < appState.field.childNodes.length; i++) {
+            if (editedUsersId.indexOf(appState.field.childNodes[i].userId) != -1) {
+                changeUserName(appState.field.childNodes[i]);
+            }
+        }
+    }
 
 
-        messageToken = resp.token;
+    appState.messageToken = resp.token;
         JSON.parse(resp.messages).forEach(function (message) {
             drawMessage(message);
         });
@@ -71,21 +72,6 @@ function parseGetResponse(responseText){
             makeMessageDeleted(id);
         });
 
-        JSON.parse(resp.changedUsers).forEach(function (user) {
-            users[user.userId] = {
-                "username": user.username,
-                "userImage": user.userImage
-            };
-            if (usernameId == user.userId) {
-                if (user.username) {
-                    setUsername(user.username);
-                }
-                if (user.userImage) {
-
-                }
-            }
-        });
-
-
+    startGettingMessages();
 }
 

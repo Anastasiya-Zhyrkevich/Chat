@@ -44,9 +44,9 @@ public class JSONConverter {
         return jsonArray.toJSONString();
     }
 
-    public static String getDeletedMessages(List<Integer> ids){
+    public static String getDeletedMessages(List<Long> ids){
         JSONArray jsonArray = new JSONArray();
-        for (Integer id: ids) {
+        for (Long id: ids) {
             jsonArray.add(id);
         }
         return jsonArray.toJSONString();

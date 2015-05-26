@@ -34,23 +34,7 @@
 		</div>
 		<div class = "col-md-9">
 			<div id = "field" class="message-area">
-				<div class = "message friend-message pull-left">
-					<div class = "message-username"> Anastasiya </div>
-				 	<div class = "message-text"> Hellojffhsbfhsbdkjfhksdjvfkdsghvfkgdsvkfhgvskhdgfvksghdvfkghsvdfkgsvdkfgvsdkgfvskhgdvfkghsdvfkgvsdkfg </div> 
-					<div class = "message-time"> 13.02 </div>
-				</div>
 
-				<div class = "message my-message pull-right">
-					<div class = "message-username"> Anastasiya </div>
-					<button type="button" class="btn btn-xs btn-default pull-right icon-padding">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                              </button>
-					<button type="button" class="btn btn-xs btn-default pull-right icon-padding">
-                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                              </button>
-				 	<div class = "message-text"> Helfjkgndfkjgndflkjgbdlfkjbgldfhbgldfjhbgdjfhbgdjhfbgjhdfbglhsdbg;jhdf;ghrdiuthrpiughirughkjfdbjhdfbglhfbgllo </div> 
-					<div class = "message-time"> 13.02 </div>
-				</div>
 			</div>
 			<div class="row">
                 		<div class="col-md-6">

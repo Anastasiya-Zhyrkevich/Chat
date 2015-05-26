@@ -14,21 +14,20 @@ function getEl(id) {
     return document.getElementById(id);
 }
 
-
-var successAuto = false;
-var editing = false;
-
-var users = {};
-var messageToken;
-var userName;
-var usernameId;
-var field = document.getElementById("field");
-var textarea = document.getElementById("textarea");
-var sendButton = document.getElementById("send-button");
-var connectionButton = document.getElementById("connection-button");
-var enterButton = document.getElementById("enter-button");
-
-
-var host = "http://localhost";
-var port = ":8080";
-var adr = "/Servlet";
+var appState = {
+    successAuto : false,
+    editing : false,
+    editingId : false,
+    users : {},
+    messageToken: "0",
+    userName : "",
+    usernameId : "",
+    field : document.getElementById("field"),
+    textarea : document.getElementById("textarea"),
+    sendButton : document.getElementById("send-button"),
+    connectionButton : document.getElementById("connection-button"),
+    enterButton : document.getElementById("enter-button"),
+    host : "http://localhost",
+    port : ":8081",
+    adr : "/Servlet"
+};
