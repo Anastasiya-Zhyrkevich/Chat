@@ -14,8 +14,9 @@ import java.util.List;
  */
 public final class DatabaseHelper {
 
+    private final static String SQL_SELECT_USER_PASS_QUERY = "SELECT user_id, pass FROM users WHERE username = ?";
     private final static String SQL_SELECT_USER_QUERY = "SELECT user_id FROM users WHERE username = ?";
-    private final static String SQL_INSERT_USER_QUERY = "INSERT INTO users (user_id, username) VALUES (?,?)";
+    private final static String SQL_INSERT_USER_QUERY = "INSERT INTO users (user_id, username, pass) VALUES (?,?,?)";
     private final static String SQL_UPDATE_USER_QUERY = "UPDATE users SET username = ? WHERE user_id = ? ";
     private final static String SQL_SELECT_COUNT_QUERY = "SELECT COUNT(*) FROM ";
     private final static String SQL_INSERT_PROTOCOL_QUERY = "INSERT INTO protocol (id, type, user_id, text, mess_id)" +
@@ -33,21 +34,18 @@ public final class DatabaseHelper {
     private DatabaseHelper() {
     }
 
-    public static int registerUser(String userName) throws DatabaseException {
+    public static int registerUser(String userName, String pass) throws DatabaseException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        int userId = 0;
+        int userId = -1;
         try {
             conn = ConnectionPool.getInstance().getConnection();
-            stmt = conn.prepareStatement(SQL_SELECT_USER_QUERY);
+            stmt = conn.prepareStatement(SQL_SELECT_USER_PASS_QUERY);
             stmt.setString(1, userName);
             rs = stmt.executeQuery();
-            if (rs.next()) {
-                userId = Integer.parseInt(rs.getString(1));
-            }
-            if (userId == 0) {
-                userId = registerNewUser(userName);
+            if (rs.next() && (rs.getString("pass").compareTo(pass) == 0)){
+                userId = Integer.parseInt(rs.getString("user_id"));
             }
         } catch (SQLException se) {
             throw new DatabaseException("Can't register user. " + se.getMessage(), se);
@@ -57,24 +55,48 @@ public final class DatabaseHelper {
         return userId;
     }
 
-    public static int registerNewUser(String userName) throws DatabaseException {
+    public static int registerNewUser(String userName, String pass) throws DatabaseException {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int userId = 0;
+        int userId = -1;
         try {
             conn = ConnectionPool.getInstance().getConnection();
-            userId = getNextFreeLine("users");
-            stmt = conn.prepareStatement(SQL_INSERT_USER_QUERY);
-            stmt.setInt(1, userId);
-            stmt.setString(2, userName);
-            stmt.executeUpdate();
-            addNewChange(new ClientProtocol("newUser", userId, userName));
+            if (userNameIsFree(userName)){
+                userId = getNextFreeLine("users");
+                stmt = conn.prepareStatement(SQL_INSERT_USER_QUERY);
+                stmt.setInt(1, userId);
+                stmt.setString(2, userName);
+                stmt.setString(3, pass);
+                stmt.executeUpdate();
+                addNewChange(new ClientProtocol("newUser", userId, userName));
+            }
         } catch (SQLException se) {
             throw new DatabaseException("Can't register new user. " + se.getMessage(), se);
         } finally {
             DatabaseUtil.close(stmt, conn);
         }
         return userId;
+    }
+
+    public static boolean userNameIsFree(String userName) throws DatabaseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean isFree = true;
+        try {
+            conn = ConnectionPool.getInstance().getConnection();
+            stmt = conn.prepareStatement(SQL_SELECT_USER_QUERY);
+            stmt.setString(1, userName);
+            rs = stmt.executeQuery();
+            if (rs.next()){
+                isFree = false;
+            }
+        } catch (SQLException se) {
+            throw new DatabaseException("Can't register user. " + se.getMessage(), se);
+        } finally {
+            DatabaseUtil.close(rs, stmt, conn);
+        }
+        return isFree;
     }
 
     public static void editUser(String userName, int userId) throws DatabaseException {

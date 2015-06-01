@@ -10,19 +10,43 @@ function run(){
     document.getElementById("enter-button").addEventListener('click', enterButtonEvent);
     appState.sendButton.disabled = true;                                //temporary
     document.getElementById("send-button").addEventListener("click", sendButtonEvent);
-
-
-
-
+    document.getElementById("register-button").addEventListener("click", registerButtonEvent);
+    document.getElementById("successReg").innerText = "";
 }
+
+function registerButtonEvent(evtObj) {
+    if (evtObj.type === 'click') {
+        var loginName = document.getElementById("reg-username-area").value;
+        var passWord = document.getElementById("reg-pass-area").value;
+        document.getElementById("reg-username-area").value = "";
+        document.getElementById("reg-pass-area").value = "";
+        if (loginName.length != 0){
+            var substr = (loginName + "aaaaaa").substring(0,6);
+            var params = '?type=REGISTER&username=' + loginName+ '&password=' + passWord;
+            getR(appState.host + appState.port + appState.adr + params, successfullRegistration, unsuccessfullRegistration);
+        }
+    }
+}
+
+function successfullRegistration(username){
+    document.getElementById("successReg").innerText = "Successfull registration of user " + username;
+}
+
+function unsuccessfullRegistration(){
+    document.getElementById("successReg").innerText = "Already got such a user";
+}
+
+
 
 function enterButtonEvent(evtObj) {
     if (evtObj.type === 'click' && appState.successAuto == false)
     {
         var loginName = document.getElementById("username-area").value;
+        var passWord = document.getElementById("pass-area").value;
         document.getElementById("username-area").value = "";
+        document.getElementById("pass-area").value = "";
         if (loginName.length != 0) {
-            var params = '?type=BASE_REQUEST&username=' + loginName;
+            var params = '?type=BASE_REQUEST&username=' + loginName+ '&password=' + passWord;
             getR(appState.host + appState.port + appState.adr + params, parseBaseResponse, continueWithError);
             appState.enterButton.innerText = "Change name";
             appState.successAuto = true;
@@ -156,6 +180,8 @@ function showServerState(flag){
     else
         appState.connectionButton.disabled = true;
 }
+
+
 
 
 function continueWithError(error) {

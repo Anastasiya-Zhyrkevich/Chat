@@ -24,13 +24,20 @@
 		</div>
 
 		<div class = "col-md-3 avatar">
+			<div class="centered" id="register">
+				<textarea id = "reg-username-area"></textarea>
+				<textarea id = "reg-pass-area"></textarea>
+				<button id = "register-button" type = "button" class="btn btn-success btn-lg btn-block" > Register ! </button>
+				<div id = "successReg"></div>
+			</div>
+
 			<div class="centered">
 				<img class = "my-avatar-photo" src="img/images.jpeg" >
 				<textarea id = "username-area"></textarea>
+				<textarea id = "pass-area"></textarea>
 				<button id = "enter-button" type = "button" class="btn btn-success btn-lg btn-block" > Enter ! </button>
 				<div id = "userName" class = "userName"></div>
 			</div>
-
 		</div>
 		<div class = "col-md-9">
 			<div id = "field" class="message-area">

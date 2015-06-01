@@ -29,15 +29,17 @@ public class Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String type = req.getParameter("type");
-
-        if (type.compareTo("GET_UPDATE") == 0 && Integer.parseInt(req.getParameter("token")) != 0) {
-            req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
-            AsyncContext ac = req.startAsync();
-            ac.setTimeout(10000);
-            ac.addListener(new AppAsyncListener());
-            AsyncRequestProcessor.addContext(ac);
-        }
         try {
+            if (type.compareTo("REGISTER") == 0){
+                RequestManager.registerRequest(req, resp);
+            }
+            if (type.compareTo("GET_UPDATE") == 0 && Integer.parseInt(req.getParameter("token")) != 0) {
+                req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
+                AsyncContext ac = req.startAsync();
+                ac.setTimeout(10000);
+                ac.addListener(new AppAsyncListener());
+                AsyncRequestProcessor.addContext(ac);
+            }
             if (type.compareTo("GET_UPDATE") == 0 && Integer.parseInt(req.getParameter("token")) == 0) {
                 RequestManager.updateRequest(req, resp);
             }

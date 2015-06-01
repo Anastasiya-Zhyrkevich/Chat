@@ -17,12 +17,13 @@ function parseBaseResponse(responseText){
     appState.textarea.focus();
     appState.sendButton.disabled = false;
     appState.successAuto = true;
+    //document.getElementById("register").hidden = true;
     startGettingMessages();
 }
 
 
 function parseGetResponse(responseText){
-    //alert("GetResponse");
+    alert("GetResponse");
     var resp = JSON.parse(responseText);
     JSON.parse(resp.users).forEach(function (user) {
             appState.users[user.userId] = {

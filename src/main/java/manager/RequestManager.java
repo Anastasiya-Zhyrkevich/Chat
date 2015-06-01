@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 /**
  * Created by User on 15.05.15.
@@ -17,14 +20,21 @@ import java.io.PrintWriter;
 public class RequestManager {
     public static void baseRequest(HttpServletRequest req, HttpServletResponse resp) throws ManagerException {
         String userName = req.getParameter("username");
+        String passWord = transformPass(req.getParameter("password") + (userName+"aaaaaa").substring(0,6));
         JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("currentUserId", DatabaseHelper.registerUser(userName));
-            jsonObject.put("token", 0);
+        int currentId = -1;
+        try{
+            currentId = DatabaseHelper.registerUser(userName, passWord);
+            if (currentId < 0)
+                resp.setStatus(401);
+            else {
+                jsonObject.put("currentUserId", currentId);
+                jsonObject.put("token", 0);
+            }
+            sendResponse(resp, jsonObject.toJSONString());
         } catch (DatabaseException e) {
             throw new ManagerException("Can't make base request " + e.getMessage(), e);
         }
-        sendResponse(resp, jsonObject.toJSONString());
     }
 
     public static void updateRequest(HttpServletRequest req, HttpServletResponse resp) throws ManagerException {
@@ -46,6 +56,20 @@ public class RequestManager {
         }
     }
 
+    public static void registerRequest(HttpServletRequest req, HttpServletResponse resp) throws ManagerException{
+        String userName = req.getParameter("username");
+        String passWord = transformPass(req.getParameter("password") + (userName+"aaaaaa").substring(0,6));
+        int currentId = -1;
+        try{
+            currentId = DatabaseHelper.registerNewUser(userName, passWord);
+            if (currentId < 0)
+                resp.setStatus(401);
+            sendResponse(resp, userName);
+        } catch (DatabaseException e) {
+            throw new ManagerException("Can't make base request " + e.getMessage(), e);
+        }
+    }
+
     public static void sendResponse(HttpServletResponse resp, String jsonString) throws ManagerException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -59,5 +83,25 @@ public class RequestManager {
             out.flush();
             out.close();
         }
+    }
+    public static String transformPass(String password){
+        MessageDigest md = null;
+        StringBuffer sb = new StringBuffer(password);
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+
+            md.update(password.getBytes());
+
+            byte byteData[] = md.digest();
+
+            //convert the byte to hex format method 1
+            sb.setLength(0);
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 }
