@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
@@ -22,12 +23,16 @@ public class RequestManager {
         String userName = req.getParameter("username");
         String passWord = transformPass(req.getParameter("password") + (userName+"aaaaaa").substring(0,6));
         JSONObject jsonObject = new JSONObject();
+        HttpSession session;
         int currentId = -1;
         try{
             currentId = DatabaseHelper.registerUser(userName, passWord);
             if (currentId < 0)
                 resp.setStatus(401);
             else {
+                session = req.getSession(true);
+                session.setMaxInactiveInterval(30*60);
+                session.setAttribute("username", userName);
                 jsonObject.put("currentUserId", currentId);
                 jsonObject.put("token", 0);
             }
@@ -38,21 +43,28 @@ public class RequestManager {
     }
 
     public static void updateRequest(HttpServletRequest req, HttpServletResponse resp) throws ManagerException {
-        try {
-            int firstToken = Integer.parseInt(req.getParameter("token"));
-            int lastToken = DatabaseHelper.getNextFreeLine("protocol");
+        HttpSession session = req.getSession(false);
+        if (session != null){
+            try {
+                int firstToken = Integer.parseInt(req.getParameter("token"));
+                int lastToken = DatabaseHelper.getNextFreeLine("protocol");
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("token", lastToken);
-            jsonObject.put("messages", JSONConverter.getMessages(DatabaseHelper.getMessages(firstToken, lastToken - 1)));
-            jsonObject.put("editedMessages", JSONConverter.getEditedMessages(DatabaseHelper.getEditedMessages(firstToken, lastToken - 1)));
-            jsonObject.put("deletedMessagesIds", JSONConverter.getDeletedMessages(DatabaseHelper.getDeleted(firstToken, lastToken - 1)));
-            jsonObject.put("users", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "newUser")));
-            jsonObject.put("changedUsers", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "editUser")));
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("token", lastToken);
+                jsonObject.put("messages", JSONConverter.getMessages(DatabaseHelper.getMessages(firstToken, lastToken - 1)));
+                jsonObject.put("editedMessages", JSONConverter.getEditedMessages(DatabaseHelper.getEditedMessages(firstToken, lastToken - 1)));
+                jsonObject.put("deletedMessagesIds", JSONConverter.getDeletedMessages(DatabaseHelper.getDeleted(firstToken, lastToken - 1)));
+                jsonObject.put("users", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "newUser")));
+                jsonObject.put("changedUsers", JSONConverter.getUsers(DatabaseHelper.getUsers(firstToken, lastToken - 1, "editUser")));
 
-            sendResponse(resp, jsonObject.toJSONString());
-        } catch (DatabaseException e) {
-            throw new ManagerException("Can't make update request " + e.getMessage(), e);
+                sendResponse(resp, jsonObject.toJSONString());
+            } catch (DatabaseException e) {
+                throw new ManagerException("Can't make update request " + e.getMessage(), e);
+            }
+        }
+        else{
+            resp.setStatus(401);
+            System.out.println("Error with session");
         }
     }
 

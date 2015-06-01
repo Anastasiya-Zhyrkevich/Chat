@@ -186,5 +186,6 @@ function showServerState(flag){
 
 function continueWithError(error) {
     console.error(error);
+    top.location = "error.jsp";
 }
 

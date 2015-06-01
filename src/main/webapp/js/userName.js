@@ -5,6 +5,5 @@
 function setUsername(username) {
     appState.userName = username;
     document.getElementById("userName").innerText = username;
-    alert("userName");
 }
 

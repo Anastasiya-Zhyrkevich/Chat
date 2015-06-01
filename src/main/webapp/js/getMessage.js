@@ -23,7 +23,7 @@ function parseBaseResponse(responseText){
 
 
 function parseGetResponse(responseText){
-    alert("GetResponse");
+    //alert("GetResponse");
     var resp = JSON.parse(responseText);
     JSON.parse(resp.users).forEach(function (user) {
             appState.users[user.userId] = {
